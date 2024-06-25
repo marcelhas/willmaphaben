@@ -21,7 +21,7 @@
   "content_scripts": [
     {
       "matches": [
-        "https://*.willhaben.at/iad/immobilien/*"
+        "https://*.willhaben.at/iad/*"
       ],
       "js": [
         "leaflet.js",
