@@ -1,0 +1,36 @@
+{
+  "manifest_version": 2,
+  "name": "Willmaphaben",
+  "version": "1.0",
+  "description": "Karte für Willhaben Immobilien",
+  "homepage_url": "https://github.com/marcelhas/willmaphaben",
+  "icons": {},
+  "permissions": [
+    "activeTab",
+    "activeTab",
+    "tabs",
+    "<all_urls>"
+  ],
+  "web_accessible_resources": [
+    "images/layers-2x.png",
+    "images/layers.png",
+    "images/marker-icon-2x.png",
+    "images/marker-icon.png",
+    "images/marker-shadow.png"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://*.willhaben.at/iad/immobilien/*"
+      ],
+      "js": [
+        "leaflet.js",
+        "main.js"
+      ],
+      "css": [
+        "main.css",
+        "leaflet.css"
+      ]
+    }
+  ]
+}
