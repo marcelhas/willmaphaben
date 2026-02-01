@@ -89,20 +89,12 @@ const main = () => {
       '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   }).addTo(map);
 
-  // Access global json data.
-  const tmp =
-    window.wrappedJSObject["__NEXT_DATA__"].props.pageProps.searchResult
-      .advertSummaryList.advertSummary;
-  XPCNativeWrapper(
-    window.wrappedJSObject["__NEXT_DATA__"].props.pageProps.searchResult
-      .advertSummaryList.advertSummary,
-  );
-
-  // Cursed cloning to prevent permission errors ¯\_(ツ)_/¯.
-  const adverts = JSON.parse(JSON.stringify(tmp));
-
   // Min/Max price per m².
   const [min, max] = [9, 15];
+
+  const adverts = JSON.parse(
+    document.getElementById("__NEXT_DATA__").textContent,
+  ).props.pageProps.searchResult.advertSummaryList.advertSummary;
 
   const preparedAdverts = adverts.flatMap((advert) => {
     const id = advert.id;
