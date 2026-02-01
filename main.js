@@ -105,6 +105,7 @@ const main = () => {
       const price = attr.find(att => att.name == "PRICE")?.values[0]
       const address = attr.find(att => att.name == "ADDRESS")?.values[0]
       const size = advert.teaserAttributes[0]?.value
+      const img = advert.advertImageList.advertImage[0]?.mainImageUrl
       const pricePerSize = calcPricePerSize(price, size)
       const color = calcColor(normalize(pricePerSize, min, max))
 
@@ -123,7 +124,8 @@ const main = () => {
           address,
           size,
           pricePerSize,
-          color
+          color,
+          img
         }
       ]
     })
@@ -131,11 +133,12 @@ const main = () => {
     const mapCenter = calcCoordinatesCenter(preparedAdverts.map(pa => pa.coordinates))
     map.setView(mapCenter, 10)
 
-    preparedAdverts.forEach(({id, coordinates, color, title, price, size, pricePerSize, address}) => {
+    preparedAdverts.forEach(({ id, coordinates, color, title, price, size, pricePerSize, address, img }) => {
       L.circle(coordinates, { radius: 48, stroke: true, strokeWidth: 1, fill: true, fillColor: color, fillOpacity: 1.0 })
         .bindPopup(`<b>${title}</b><br>\
-          ${price ?? "?"}€, ${size ?? "?"}m², ${pricePerSize ?? "?"}€/m²<br>\
-          ${address ?? "-"} <br>\
+          <img src="${img}" width="250px" alt="image of ${title}" />\
+          <p>${price ?? "?"}€, ${size ?? "?"}m², ${pricePerSize ?? "?"}€/m²</p>\
+          <p>${address ?? "-"}</p>\
           <a href="https://www.willhaben.at/iad/object?adId=${id}">link</a>`)
         .addTo(map)
     })
