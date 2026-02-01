@@ -101,8 +101,8 @@ const main = () => {
       const id = advert.id
       const attr = advert.attributes.attribute
       const c = attr.filter(att => att.name == "COORDINATES").flatMap(x => x.values[0].split(","))
-      const title = attr.find(att => att.name == "HEADING").values[0]
-      const price = attr.find(att => att.name == "PRICE").values[0]
+      const title = attr.find(att => att.name == "HEADING")?.values[0]
+      const price = attr.find(att => att.name == "PRICE")?.values[0]
       const address = attr.find(att => att.name == "ADDRESS")?.values[0]
       const size = advert.teaserAttributes[0]?.value
       const pricePerSize = calcPricePerSize(price, size)
