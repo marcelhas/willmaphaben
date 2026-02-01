@@ -134,7 +134,7 @@ const main = () => {
     preparedAdverts.forEach(({id, coordinates, color, title, price, size, pricePerSize, address}) => {
       L.circle(coordinates, { radius: 48, stroke: true, strokeWidth: 1, fill: true, fillColor: color, fillOpacity: 1.0 })
         .bindPopup(`<b>${title}</b><br>\
-          ${price}€, ${size}m², ${pricePerSize ?? "?"}€/m²<br>\
+          ${price ?? "?"}€, ${size ?? "?"}m², ${pricePerSize ?? "?"}€/m²<br>\
           ${address ?? "-"} <br>\
           <a href="https://www.willhaben.at/iad/object?adId=${id}">link</a>`)
         .addTo(map)
