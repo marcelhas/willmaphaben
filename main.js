@@ -109,9 +109,7 @@ const main = () => {
       const pricePerSize = calcPricePerSize(price, size)
       const color = calcColor(normalize(pricePerSize, min, max))
 
-      console.log(id)
       if (c.length <= 0) {
-        console.log("no coordinates", advert)
         return []
       }
 
