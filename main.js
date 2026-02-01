@@ -9,7 +9,7 @@ const interpolateColors = (a, b, x) => {
 }
 
 const normalize = (value, min, max) => {
-  if (normalize == null) return null
+  if (value == null) return null
   if (min === max) return 1
   if (value <= min) return 0
   if (value >= max) return 1
