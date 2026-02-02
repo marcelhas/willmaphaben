@@ -1,6 +1,6 @@
 # willmaphaben
 
-A Firefox extension that displays Willhaben Immobilien on a map.
+A Firefox extension that displays Willhaben adverts on a map.
 
 ## Setup
 
