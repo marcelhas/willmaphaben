@@ -5,12 +5,7 @@
   "description": "Karte für Willhaben Immobilien",
   "homepage_url": "https://github.com/marcelhas/willmaphaben",
   "icons": {},
-  "permissions": [
-    "activeTab",
-    "activeTab",
-    "tabs",
-    "<all_urls>"
-  ],
+  "permissions": [],
   "web_accessible_resources": [
     "images/layers-2x.png",
     "images/layers.png",
