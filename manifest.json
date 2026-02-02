@@ -25,6 +25,7 @@
       ],
       "js": [
         "leaflet.js",
+        "utils.js",
         "main.js"
       ],
       "css": [
