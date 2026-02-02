@@ -75,13 +75,43 @@ const calcCoordinatesCenter = (coordinates) => {
   ];
 };
 
-const main = () => {
+const mapAdvert = (advert) => {
+  const id = advert.id;
+  const attr = advert.attributes.attribute;
+  const coordinates = attr
+    .filter((att) => att.name == "COORDINATES")
+    .flatMap((x) => x.values[0].split(","));
+  const title = attr.find((att) => att.name == "HEADING")?.values[0];
+  const price = attr.find((att) => att.name == "PRICE")?.values[0];
+  const address = attr.find((att) => att.name == "ADDRESS")?.values[0];
+  const size = advert.teaserAttributes[0]?.value;
+  const img = advert.advertImageList.advertImage[0]?.mainImageUrl;
+
+  return {
+    id,
+    coordinates,
+    title,
+    price,
+    address,
+    size,
+    img,
+  };
+};
+
+const filterValidAdvert = (advert) => {
+  return advert.coordinates.length > 0;
+};
+
+const main = (adverts) => {
   document.body.style.border = "5px solid red";
 
+  // Remove existing map.
+  document.getElementById("map")?.remove();
   // Map container.
   const mapDiv = document.createElement("div");
   mapDiv.setAttribute("id", "map");
   document.body.prepend(mapDiv);
+
   const map = L.map("map");
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     maxZoom: 19,
@@ -92,42 +122,7 @@ const main = () => {
   // Min/Max price per m².
   const [min, max] = [9, 15];
 
-  const adverts = JSON.parse(
-    document.getElementById("__NEXT_DATA__").textContent,
-  ).props.pageProps.searchResult.advertSummaryList.advertSummary;
-
-  const preparedAdverts = adverts.flatMap((advert) => {
-    const id = advert.id;
-    const attr = advert.attributes.attribute;
-    const c = attr
-      .filter((att) => att.name == "COORDINATES")
-      .flatMap((x) => x.values[0].split(","));
-    const title = attr.find((att) => att.name == "HEADING")?.values[0];
-    const price = attr.find((att) => att.name == "PRICE")?.values[0];
-    const address = attr.find((att) => att.name == "ADDRESS")?.values[0];
-    const size = advert.teaserAttributes[0]?.value;
-    const img = advert.advertImageList.advertImage[0]?.mainImageUrl;
-    const pricePerSize = calcPricePerSize(price, size);
-    const color = calcColor(normalize(pricePerSize, min, max));
-
-    if (c.length <= 0) {
-      return [];
-    }
-
-    return [
-      {
-        id,
-        coordinates: c,
-        title,
-        price,
-        address,
-        size,
-        pricePerSize,
-        color,
-        img,
-      },
-    ];
-  });
+  const preparedAdverts = adverts.map(mapAdvert).filter(filterValidAdvert);
 
   const mapCenter = calcCoordinatesCenter(
     preparedAdverts.map((pa) => pa.coordinates),
@@ -135,17 +130,9 @@ const main = () => {
   map.setView(mapCenter, 10);
 
   preparedAdverts.forEach(
-    ({
-      id,
-      coordinates,
-      color,
-      title,
-      price,
-      size,
-      pricePerSize,
-      address,
-      img,
-    }) => {
+    ({ id, coordinates, title, price, size, address, img }) => {
+      const pricePerSize = calcPricePerSize(price, size);
+      const color = calcColor(normalize(pricePerSize, min, max));
       L.circle(coordinates, {
         radius: 48,
         stroke: true,
@@ -166,4 +153,38 @@ const main = () => {
   );
 };
 
-main();
+main(
+  JSON.parse(document.getElementById("__NEXT_DATA__").textContent).props
+    .pageProps.searchResult.advertSummaryList.advertSummary,
+);
+
+// See <https://aweirdimagination.net/2024/05/19/monkey-patching-async-functions-in-user-scripts/>.
+const intercept = (resource, responseText) => {
+  if (resource.includes("/webapi/iad/search/atz/seo/")) {
+    main(JSON.parse(responseText).advertSummaryList.advertSummary);
+  }
+};
+
+const w = window.wrappedJSObject;
+if (w) {
+  exportFunction(intercept, window, { defineAs: "extIntercept" });
+  w.eval("window.origFetch = window.fetch");
+
+  w.eval(
+    `window.fetch = ${async (...args) => {
+      let [resource, config] = args;
+      const response = await window.origFetch(resource, config);
+      window.extIntercept(resource, await response.clone().text());
+      return response;
+    }}`,
+  );
+} else {
+  const { fetch: origFetch } = window;
+
+  window.fetch = async (...args) => {
+    let [resource, config] = args;
+    const response = await origFetch(resource, config);
+    intercept(resource, await response.clone().text());
+    return response;
+  };
+}
