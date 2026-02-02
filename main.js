@@ -31,7 +31,7 @@ const filterValidAdvert = (advert) => {
   return advert.coordinates.length > 0;
 };
 
-const main = (adverts) => {
+const rerenderMap = (adverts) => {
   document.body.style.border = "5px solid red";
 
   // Remove existing map.
@@ -82,15 +82,16 @@ const main = (adverts) => {
   );
 };
 
-main(
+rerenderMap(
   JSON.parse(document.getElementById("__NEXT_DATA__").textContent).props
     .pageProps.searchResult.advertSummaryList.advertSummary,
 );
 
+// React to filter changes.
 // See <https://aweirdimagination.net/2024/05/19/monkey-patching-async-functions-in-user-scripts/>.
 const intercept = (resource, responseText) => {
   if (resource.includes("/webapi/iad/search/atz/seo/")) {
-    main(JSON.parse(responseText).advertSummaryList.advertSummary);
+    rerenderMap(JSON.parse(responseText).advertSummaryList.advertSummary);
   }
 };
 
