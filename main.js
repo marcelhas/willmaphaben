@@ -71,9 +71,14 @@ const rerenderMap = (adverts) => {
   }).addTo(map);
 
   // Min/Max price per m².
-  const [min, max] = [9, 15];
+  const urlParams = new URLSearchParams(window.location.search);
+  const [min, max] = [
+    Number(urlParams.get("min")) ?? 0,
+    Number(urlParams.get("max")) ?? 100,
+  ];
 
   const preparedAdverts = adverts.map(mapAdvert).filter(filterValidAdvert);
+  console.log(`${preparedAdverts.length} adverts on map`);
 
   const mapCenter = calcCoordinatesCenter(
     preparedAdverts.map((pa) => pa.coordinates),
