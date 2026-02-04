@@ -31,6 +31,29 @@ const filterValidAdvert = (advert) => {
   return advert.coordinates.length > 0;
 };
 
+const toImmobilienPopup = ({ title, img, price, size, address, id }) => {
+  const pricePerSize = calcPricePerSize(price, size);
+  return `<b>${title}</b><br>\
+          <img src="${img}" width="250px" alt="image of ${title}" />\
+          <p>${price ?? "?"}€, ${size ?? "?"}m², ${pricePerSize ?? "?"}€/m²</p>\
+          <p>${address ?? "-"}</p>\
+          <a href="https://www.willhaben.at/iad/object?adId=${id}">link</a>`;
+};
+
+const toGenericPopup = ({ title, img, price, address, id }) => {
+  return `<b>${title}</b><br>\
+          <img src="${img}" width="250px" alt="image of ${title}" />\
+          <p>${price ?? "?"}€</p>\
+          <p>${address ?? "-"}</p>\
+          <a href="https://www.willhaben.at/iad/object?adId=${id}">link</a>`;
+};
+
+const toPopup = (advert) => {
+  const url = window.location.pathname;
+  if (url.includes("/immobilien/")) return toImmobilienPopup(advert);
+  else return toGenericPopup(advert);
+};
+
 const rerenderMap = (adverts) => {
   document.body.style.border = "5px solid red";
 
@@ -57,28 +80,19 @@ const rerenderMap = (adverts) => {
   );
   map.setView(mapCenter, 10);
 
-  preparedAdverts.forEach(
-    ({ id, coordinates, title, price, size, address, img }) => {
-      const pricePerSize = calcPricePerSize(price, size);
-      const color = calcColor(normalize(pricePerSize, min, max));
-      L.circle(coordinates, {
-        radius: 48,
-        stroke: true,
-        strokeWidth: 1,
-        fill: true,
-        fillColor: color,
-        fillOpacity: 1.0,
-      })
-        .bindPopup(
-          `<b>${title}</b><br>\
-          <img src="${img}" width="250px" alt="image of ${title}" />\
-          <p>${price ?? "?"}€, ${size ?? "?"}m², ${pricePerSize ?? "?"}€/m²</p>\
-          <p>${address ?? "-"}</p>\
-          <a href="https://www.willhaben.at/iad/object?adId=${id}">link</a>`,
-        )
-        .addTo(map);
-    },
-  );
+  preparedAdverts.forEach((advert) => {
+    const color = calcColor(normalize(advert.price, min, max));
+    L.circle(advert.coordinates, {
+      radius: 48,
+      stroke: true,
+      strokeWidth: 1,
+      fill: true,
+      fillColor: color,
+      fillOpacity: 1.0,
+    })
+      .bindPopup(toPopup(advert))
+      .addTo(map);
+  });
 };
 
 rerenderMap(
