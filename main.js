@@ -67,7 +67,8 @@ const rerenderMap = (adverts) => {
   const map = L.map("map");
   L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
-      '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    referrerPolicy: "strict-origin-when-cross-origin",
   }).addTo(map);
 
   // Min/Max price per m².
