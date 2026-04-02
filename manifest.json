@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Willmaphaben",
+  "name": "willmaphaben",
   "version": "1.0",
-  "description": "Karte für Willhaben Immobilien",
+  "description": "A map for Willhaben adverts",
   "homepage_url": "https://github.com/marcelhas/willmaphaben",
   "icons": {},
   "permissions": [],
