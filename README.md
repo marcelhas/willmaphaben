@@ -12,3 +12,9 @@ A Firefox extension that displays Willhaben adverts on a map.
 4. Select `/manifest.json`
 5. Go to `https://www.willhaben.at/`
 6. Profit
+
+## Build
+
+```sh
+web-ext build
+```
