@@ -55,8 +55,6 @@ const toPopup = (advert) => {
 };
 
 const rerenderMap = (adverts) => {
-  document.body.style.border = "5px solid red";
-
   // Remove existing map.
   document.getElementById("map")?.remove();
   // Map container.
