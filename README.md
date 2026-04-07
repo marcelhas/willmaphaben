@@ -18,5 +18,5 @@ A Firefox extension that shows a map on [Willhaben](https://willhaben.at).
 ## Build
 
 ```sh
-web-ext build
+web-ext build -i images/demo.avif
 ```
