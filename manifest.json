@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "willmaphaben",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A map for Willhaben adverts",
   "homepage_url": "https://github.com/marcelhas/willmaphaben",
   "icons": {
