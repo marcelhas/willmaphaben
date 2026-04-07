@@ -4,7 +4,9 @@
   "version": "1.0.2",
   "description": "A map for Willhaben adverts",
   "homepage_url": "https://github.com/marcelhas/willmaphaben",
-  "icons": {},
+  "icons": {
+    "1024": "images/logo.png"
+  },
   "permissions": [],
   "browser_specific_settings": {
     "gecko": {
