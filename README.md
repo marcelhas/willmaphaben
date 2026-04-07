@@ -1,6 +1,8 @@
 # willmaphaben
 
-A Firefox extension that displays Willhaben adverts on a map.
+A Firefox extension that shows a map on [Willhaben](https://willhaben.at).
+
+![Demo Video](./images/demo.avif)
 
 ## Setup
 > [!warning]
